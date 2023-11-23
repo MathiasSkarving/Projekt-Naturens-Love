@@ -26,7 +26,6 @@ public class App extends PApplet {
     String summary;
     PFont font;
     String shortsummary;
-    Movie movie;
 
     public static void main(String[] args) {
         PApplet.main("App");
