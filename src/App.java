@@ -4,6 +4,8 @@ import processing.core.PImage;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 import java.util.Scanner;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class App extends PApplet {
 
@@ -30,6 +32,7 @@ public class App extends PApplet {
     int imageindex;
     int width = 800;
     int height = 600;
+    String sunrisedate, sunsetdate;
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -75,6 +78,11 @@ public class App extends PApplet {
             System.out.println("Beskrivelse af vejret i dag: " + getsummary());
             System.out.println("Temperatur: " + gettemp() + " grader " + "| Vindhastighed: " + getwindspeed() + " m/s"
                     + " | Skyprocent: " + getcloudiness() + "%");
+            Date sunrisetime = new java.util.Date((long)getsunrise()*1000);
+            Date sunsettime = new java.util.Date((long)getsunset()*1000);
+
+            System.out.println(sunsettime);
+            System.out.println(sunrisetime);
         }
 
         textFont(font);
@@ -98,7 +106,7 @@ public class App extends PApplet {
         textSize(30);
         textAlign(CORNER);
         strokeText("Vejret i dag: " + summary, 50, 200);
-        strokeText("Tid: " + hour() + "-" + minute() + "-" + second(), 50, 250);
+        strokeText("Tid: " + hour() + "-" + minute() + "-" + second(), 50, 0);
     }
 
     public void strokeText(String message, int x, int y) {
@@ -148,17 +156,30 @@ public class App extends PApplet {
         return temp;
     }
 
-    public void getsunrisesunset() {
+    public int getsunrise() {
         try {
             JSONObject jsonData = loadJSONObject(url);
             int sunriseread = jsonData.getJSONObject("sys").getInt("sunrise");
-            int sunsetread = jsonData.getJSONObject("sys").getInt("sunset");
             sunrise = sunriseread;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return sunrise;
+    }
+
+    public int getsunset() {
+        try {
+            JSONObject jsonData = loadJSONObject(url);
+            int sunsetread = jsonData.getJSONObject("sys").getInt("sunset");
             sunset = sunsetread;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        return sunset;
     }
 
     public String getsummary() {
