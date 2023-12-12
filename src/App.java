@@ -6,6 +6,7 @@ import processing.data.JSONObject;
 import java.util.Scanner;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 public class App extends PApplet {
 
@@ -32,7 +33,11 @@ public class App extends PApplet {
     int imageindex;
     int width = 800;
     int height = 600;
-    String sunrisedate, sunsetdate;
+    String sunsetdate, sunrisedate;
+    String pattern = "MM/dd/yyyy HH:mm:ss";
+    DateFormat df = new SimpleDateFormat(pattern);
+    String searchtext;
+    Boolean mouseWasPressed = false;
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -62,8 +67,9 @@ public class App extends PApplet {
         for (int i = 0; i < 8; i++) {
             background[i].resize(800, 600);
         }
-        
+
         getimageindex();
+
         lasttimecheck = millis();
     }
 
@@ -78,8 +84,10 @@ public class App extends PApplet {
             System.out.println("Beskrivelse af vejret i dag: " + getsummary());
             System.out.println("Temperatur: " + gettemp() + " grader " + "| Vindhastighed: " + getwindspeed() + " m/s"
                     + " | Skyprocent: " + getcloudiness() + "%");
-            Date sunrisetime = new java.util.Date((long)getsunrise()*1000);
-            Date sunsettime = new java.util.Date((long)getsunset()*1000);
+            Date sunrisetime = new java.util.Date((long) getsunrise() * 1000);
+            Date sunsettime = new java.util.Date((long) getsunset() * 1000);
+            sunsetdate = df.format(sunsettime);
+            sunrisedate = df.format(sunrisetime);
 
             System.out.println(sunsettime);
             System.out.println(sunrisetime);
@@ -106,7 +114,10 @@ public class App extends PApplet {
         textSize(30);
         textAlign(CORNER);
         strokeText("Vejret i dag: " + summary, 50, 200);
-        strokeText("Tid: " + hour() + "-" + minute() + "-" + second(), 50, 0);
+        strokeText("Tid: " + hour() + "-" + minute() + "-" + second(), 50, 250);
+        strokeText("Solopgang: " + sunrisedate, 50, 500);
+        strokeText("Solnedgang: " + sunsetdate, 50, 550);
+        searchbox();
     }
 
     public void strokeText(String message, int x, int y) {
@@ -117,6 +128,42 @@ public class App extends PApplet {
         text(message, x, y + 1);
         fill(0);
         text(message, x, y);
+    }
+
+    public void searchbox() {
+        fill(255);
+        rect(450, 50, 200, 50);
+
+        if (mousePressed && mouseX >= 450 && mouseX <= 650 && mouseY >= 50 && mouseY <= 100) {
+            mouseWasPressed = true;
+            if (mouseWasPressed == true) {
+                System.out.println("TRUE!");
+                textSize(25);
+
+                if (keyPressed) {
+                    if (key == CODED) {
+                        switch (keyCode) {
+                            case ENTER:
+                                mousePressed = false;
+                                break;
+                        }
+                    } else {
+                        if (key == BACKSPACE && searchtext.length() > 0) {
+                            searchtext = searchtext.substring(0, searchtext.length() - 1);
+                            delay(10);
+                        } else {
+                            searchtext += key;
+                            delay(10);
+                        }
+                    }
+                }
+            }
+        }
+        if (mousePressed && mouseX < 450 && mouseX > 650 && mouseY < 50 && mouseY > 100) {
+            mouseWasPressed = false;
+        }
+        if(searchtext != null)
+        text(searchtext, 475, 75);
     }
 
     public void getimageindex() {
@@ -165,7 +212,7 @@ public class App extends PApplet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return sunrise;
     }
 
@@ -178,7 +225,7 @@ public class App extends PApplet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return sunset;
     }
 
