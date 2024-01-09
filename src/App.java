@@ -70,6 +70,7 @@ public class App extends PApplet {
 
         getimageindex();
 
+        timeinterval = 500;
         lasttimecheck = millis();
     }
 
@@ -117,7 +118,21 @@ public class App extends PApplet {
         strokeText("Tid: " + hour() + "-" + minute() + "-" + second(), 50, 250);
         strokeText("Solopgang: " + sunrisedate, 50, 500);
         strokeText("Solnedgang: " + sunsetdate, 50, 550);
-        searchbox();
+
+        if (keyPressed) {
+            if(key == 'r')
+            {   
+                restart();
+            }
+        }
+
+    }
+
+    public void restart()
+    {
+        foundCity = false;
+        cityname = null;
+        setup();
     }
 
     public void strokeText(String message, int x, int y) {
@@ -128,42 +143,6 @@ public class App extends PApplet {
         text(message, x, y + 1);
         fill(0);
         text(message, x, y);
-    }
-
-    public void searchbox() {
-        fill(255);
-        rect(450, 50, 200, 50);
-
-        if (mousePressed && mouseX >= 450 && mouseX <= 650 && mouseY >= 50 && mouseY <= 100) {
-            mouseWasPressed = true;
-            if (mouseWasPressed == true) {
-                System.out.println("TRUE!");
-                textSize(25);
-
-                if (keyPressed) {
-                    if (key == CODED) {
-                        switch (keyCode) {
-                            case ENTER:
-                                mousePressed = false;
-                                break;
-                        }
-                    } else {
-                        if (key == BACKSPACE && searchtext.length() > 0) {
-                            searchtext = searchtext.substring(0, searchtext.length() - 1);
-                            delay(10);
-                        } else {
-                            searchtext += key;
-                            delay(10);
-                        }
-                    }
-                }
-            }
-        }
-        if (mousePressed && mouseX < 450 && mouseX > 650 && mouseY < 50 && mouseY > 100) {
-            mouseWasPressed = false;
-        }
-        if(searchtext != null)
-        text(searchtext, 475, 75);
     }
 
     public void getimageindex() {
