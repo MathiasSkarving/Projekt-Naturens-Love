@@ -143,10 +143,10 @@ public class Screen extends PApplet {
         image(termometer, width - 100, (height / 2), 400, 500);
         textSize(25);
         strokeText("Temperatur: " + myData.gettemp() + " grader", width - 270, height / 2);
-        bluecol = map(myData.gettemp(), -15, 45, 225, 0);
-        redcol = map(myData.gettemp(), -15, 45, 0, 255);
+        bluecol = map(myData.gettemp(), -45, 50, 225, 0);
+        redcol = map(myData.gettemp(), -45, 50, 0, 255);
         fill(redcol, 0, bluecol);
-        temprange = map(myData.gettemp(), -15, 45, 0, 325);
+        temprange = map(myData.gettemp(), -45, 50, 0, 325);
         rect(width - 112, 450, 25, -temprange);
         circle(width - 100, 455, 65);
         textSize(30);
