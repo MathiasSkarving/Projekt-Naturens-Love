@@ -14,6 +14,7 @@ public class Cityselector extends PApplet {
     private String url;
     String country;
 
+// Constructor med input
     public Cityselector(String citynameinput) {
         cityname = citynameinput;
     }
@@ -36,7 +37,9 @@ public class Cityselector extends PApplet {
 
     public void cityselect(JSONArray jsonArray) {
         try {
+            // Selection loop
             while (foundCity != true) {
+                // Søger igennem JSON arrayet efter byen
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JSONObject cityObject = jsonArray.getJSONObject(i);
                     if (cityObject.getString("city").equalsIgnoreCase(cityname)) {
@@ -53,12 +56,14 @@ public class Cityselector extends PApplet {
                 }
             }
 
+            // Find byen fra index
             JSONObject city = jsonArray.getJSONObject(index);
             lat = city.getString("lat");
             lng = city.getString("lng");
 
             System.out.println(lat + ":" + lng);
 
+            // Formatér dataurl
             this.url = String.format(
                     "https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&units=metric&appid=89a2601e9cd2d8c8c5f113cba2ba204e",
                     lat, lng);

@@ -35,15 +35,18 @@ public class Screen extends PApplet {
     }
 
     public void setup() {
-        System.out.print("Enter a city name: ");
+        System.out.print("Skriv bynavn: ");
         cityname = cityinput.nextLine();
+        // Lav nyt Cityselector objekt
         myCity = new Cityselector(cityname);
+        // Finder byens data
         myCity.cityselect(loadJSONArray("worldcities.json"));
         myCity.setFoundCity(true);
+        // Få url til bydata
         dataurl = myCity.getUrl();
         termometer = loadImage("thermometer.png");
         byskilt = loadImage("byskilt.png");
-        background = new PImage[9];
+        background = new PImage[10];
         background[0] = loadImage("clearsky.jpg");
         background[1] = loadImage("fewclouds.jpg");
         background[2] = loadImage("scatteredclouds.jpg");
@@ -53,11 +56,14 @@ public class Screen extends PApplet {
         background[6] = loadImage("snow.jpg");
         background[7] = loadImage("mist.jpg");
         background[8] = loadImage("drizzle.jpg");
+        background[9] = loadImage("overcastclouds.jpg");
         font = createFont("Roboto-Bold.ttf", 50);
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 10; i++) {
             background[i].resize(800, 600);
         }
+
+        // Load vejrdata til dataklassen
         myData.getJSONdata(loadJSONObject(dataurl));
         getimageindex();
         timeinterval = 500;
@@ -69,6 +75,7 @@ public class Screen extends PApplet {
     }
 
     public void restart() {
+        // restart-funktion
         myCity.setFoundCity(false);
         setup();
     }
@@ -103,7 +110,7 @@ public class Screen extends PApplet {
         } else if (myData.getsummary().equals("fog")) {
             imageindex = 7;
         } else if (myData.getsummary().equals("overcast clouds")) {
-            imageindex = 3;
+            imageindex = 9;
         } else if (myData.getshortsum().equals("Drizzle")) {
             imageindex = 8;
         } else {
@@ -121,16 +128,19 @@ public class Screen extends PApplet {
         background(background[imageindex]);
 
         if (millis() > lasttimecheck + timeinterval) {
+            // Loop til vejrdata
             myData.getJSONdata(loadJSONObject(dataurl));
             getimageindex();
             timeinterval = 6000;
             lasttimecheck = millis();
+            // Datoformatering
             Date sunrisetime = new java.util.Date((long) myData.getsunrise() * 1000);
             Date sunsettime = new java.util.Date((long) myData.getsunset() * 1000);
             sunsetdate = df.format(sunsettime);
             sunrisedate = df.format(sunrisetime);
         }
 
+        // Layout
         textFont(font);
         imageMode(CORNER);
         noStroke();
@@ -151,9 +161,38 @@ public class Screen extends PApplet {
         circle(width - 100, 455, 65);
         textSize(30);
         textAlign(CORNER);
-        strokeText("Vejret i dag: " + myData.getsummary(), 25, 225);
+        strokeText("Vejret i dag: " + translatesummary(), 25, 225);
         strokeText("Tid: " + hour() + "-" + minute() + "-" + second(), 25, 275);
         strokeText("Solopgang: " + sunrisedate, 25, 525);
         strokeText("Solnedgang: " + sunsetdate, 25, 575);
+    }
+
+    public String translatesummary() {
+        // Oversættelse af vejrbeskrivelser
+        if (myData.getsummary().equals("clear sky")) {
+            return "Klar himmel";
+        } else if (myData.getsummary().equals("few clouds")) {
+            return "Få skyer på himlen";
+        } else if (myData.getsummary().equals("scattered clouds")) {
+            return "Spredte skyer på himlen";
+        } else if (myData.getsummary().equals("broken clouds")) {
+            return "Delvis skydække";
+        } else if (myData.getshortsum().equals("Rain")) {
+            return "Regnvejr";
+        } else if (myData.getshortsum().equals("Thunderstorm")) {
+            return "Tordenvejr";
+        } else if (myData.getshortsum().equals("Snow")) {
+            return "Snevejr";
+        } else if (myData.getsummary().equals("mist")) {
+            return "Let tåge";
+        } else if (myData.getsummary().equals("fog")) {
+            return "Tåget";
+        } else if (myData.getsummary().equals("overcast clouds")) {
+            return "Komplet skydække";
+        } else if (myData.getshortsum().equals("Drizzle")) {
+            return "Let regn";
+        } else {
+            return "Kunnne ikke finde passende vejrbeskrivelse";
+        }
     }
 }

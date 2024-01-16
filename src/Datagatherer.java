@@ -7,11 +7,12 @@ public class Datagatherer extends PApplet {
     private int sunset, sunrise;
     private String summary;
     private String shortsummary;
-    JSONObject jsonData;
+    private JSONObject jsonData;
 
     public Datagatherer() {
     }
 
+    // indlæs data
     public void getJSONdata(JSONObject jsonobjectin)
     {
         jsonData = jsonobjectin;
