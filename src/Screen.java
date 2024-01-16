@@ -111,6 +111,12 @@ public class Screen extends PApplet {
         }
     }
 
+    public void keyPressed() {
+            if (key == 'r') {
+                restart();
+            }
+        }  
+
     public void update() {
         background(background[imageindex]);
 
@@ -149,11 +155,5 @@ public class Screen extends PApplet {
         strokeText("Tid: " + hour() + "-" + minute() + "-" + second(), 25, 275);
         strokeText("Solopgang: " + sunrisedate, 25, 525);
         strokeText("Solnedgang: " + sunsetdate, 25, 575);
-
-        if (keyPressed) {
-            if (key == 'r') {
-                restart();
-            }
-        }
     }
 }
