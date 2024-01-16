@@ -24,6 +24,7 @@ public class Screen extends PApplet {
     Cityselector myCity;
     private String dataurl;
     private String cityname;
+    Scanner cityinput = new Scanner(System.in);
 
     public static void main(String[] args) {
         PApplet.main("Screen");
@@ -34,10 +35,8 @@ public class Screen extends PApplet {
     }
 
     public void setup() {
-        try (Scanner cityinput = new Scanner(System.in)) {
-            System.out.print("Enter a city name: ");
-            cityname = cityinput.nextLine();
-        }
+        System.out.print("Enter a city name: ");
+        cityname = cityinput.nextLine();
         myCity = new Cityselector(cityname);
         myCity.cityselect(loadJSONArray("worldcities.json"));
         myCity.setFoundCity(true);
