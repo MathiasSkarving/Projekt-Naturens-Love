@@ -1,8 +1,16 @@
+
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
+import processing.data.JSONObject;
+
 import java.util.Date;
 import java.util.Scanner;
+
+import classes.Cityselector;
+import classes.Datagatherer;
+
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 
@@ -40,9 +48,7 @@ public class Screen extends PApplet {
         // Lav nyt Cityselector objekt
         myCity = new Cityselector(cityname);
         // Finder byens data
-        myCity.cityselect(loadJSONArray("worldcities.json"));
-        myCity.setFoundCity(true);
-        // Få url til bydata
+        loadcityjsonarray();        // Få url til bydata
         dataurl = myCity.getUrl();
         termometer = loadImage("thermometer.png");
         byskilt = loadImage("byskilt.png");
@@ -68,6 +74,10 @@ public class Screen extends PApplet {
         getimageindex();
         timeinterval = 500;
         lasttimecheck = millis();
+    }
+
+    public void loadcityjsonarray() {
+        myCity.cityselect(loadJSONArray("worldcities.json"));
     }
 
     public void draw() {

@@ -1,3 +1,4 @@
+package classes;
 import java.util.Scanner;
 
 import processing.core.PApplet;
@@ -33,6 +34,18 @@ public class Cityselector extends PApplet {
 
     public String getUrl() {
         return this.url;
+    }
+
+    public JSONObject getjJsonObject(String dataurlin) {
+        JSONObject jsonobject;
+        jsonobject = loadJSONObject(dataurlin);
+        return jsonobject;
+    }
+
+    public JSONArray getjJsonArray() {
+        JSONArray jsonarray;
+        jsonarray = loadJSONArray("worldcities.json");
+        return jsonarray;
     }
 
     public void cityselect(JSONArray jsonArray) {
